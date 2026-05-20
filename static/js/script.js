@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+    console.log(monthlyLabels);
+    console.log(monthlyData);
+
     // =========================
     // GRAPHIQUE RÉSERVATIONS
     // =========================
@@ -7,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const ctx1 =
         document.getElementById('monthlyChart');
 
-    if (ctx1) {
+    if (ctx1 && monthlyLabels.length > 0) {
 
         new Chart(ctx1, {
 
@@ -50,11 +53,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // =========================
 
     const ctx2 =
-        document.getElementById(
-            'destinationsChart'
-        );
+        document.getElementById('destinationsChart');
 
-    if (ctx2) {
+    if (ctx2 && destinationsLabels.length > 0) {
 
         new Chart(ctx2, {
 
@@ -84,4 +85,3 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
-

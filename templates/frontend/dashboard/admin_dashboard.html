@@ -244,17 +244,17 @@
 </div>
 <script>
 
-    const monthlyLabels =
-        ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'];
+const monthlyLabels =
+    {{ monthly_labels|safe }};
 
-    const monthlyData =
-        {{ monthly_data|safe }};
+const monthlyData =
+    {{ monthly_data|safe }};
 
-    const destinationsLabels =
-        {{ destinations_labels|safe }};
+const destinationsLabels =
+    {{ destinations_labels|safe }};
 
-    const destinationsData =
-        {{ destinations_data|safe }};
+const destinationsData =
+    {{ destinations_data|safe }};
 
 </script>
 
