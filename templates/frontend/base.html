@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}FlyAura{% endblock %}</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="container">
+
+        <!-- LOGO -->
+        <a href="{% url 'home' %}" class="logo">
+
+            <div class="logo-icon">
+                <i class="fas fa-plane-departure"></i>
+            </div>
+
+            <div class="logo-text">
+                Fly<span>Aura</span>
+            </div>
+
+        </a>
+
+        
+
+        <!-- MENU -->
+        <div class="nav-links" id="navLinks">
+
+            <!-- ACCUEIL -->
+            <a href="{% url 'home' %}" class="nav-item">
+                <i class="fas fa-home"></i>
+                <span>Accueil</span>
+            </a>
+
+            <!-- VOYAGES -->
+            <a href="{% url 'voyages' %}" class="nav-item">
+                <i class="fas fa-globe"></i>
+                <span>Voyages</span>
+            </a>
+
+            {% if user.is_authenticated %}
+
+                <!-- NOTIFICATIONS -->
+                <a href="{% url 'notifications' %}" class="nav-item notif">
+
+                    <i class="fas fa-bell"></i>
+
+                    {% if notif_count > 0 %}
+                        <span class="notif-badge">
+                            {{ notif_count }}
+                        </span>
+                    {% endif %}
+
+                </a>
+
+                {% if user.is_superuser %}
+
+                    <!-- DASHBOARD ADMIN -->
+                    <a href="/dashboard/" class="nav-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                
+
+                {% endif %}
+
+                <!-- USER -->
+<div class="user-dropdown">
+
+    <div class="user-trigger">
+
+        <div class="user-avatar">
+            {{ user.username|first|upper }}
+        </div>
+
+        <span class="user-name">
+            {{ user.username }}
+        </span>
+
+        <i class="fas fa-chevron-down"></i>
+
+    </div>
+
+    <!-- USER DROPDOWN MENU -->
+    <div class="user-dropdown-menu">
+
+        <a href="{% url 'reservation_list' %}" class="dropdown-item">
+            <i class="fas fa-history"></i>
+            Mes réservations
+        </a>
+
+        <a href="{% url 'documents' %}" class="dropdown-item">
+            <i class="fas fa-file-alt"></i>
+            Documents
+        </a>
+        <a href="{% url 'profile' %}" class="dropdown-item">
+            <i class="fas fa-user-cog"></i>
+            Profil
+        </a>
+
+        <div class="dropdown-divider"></div>
+
+        <!-- LOGOUT -->
+        <a href="{% url 'logout' %}" class="dropdown-item logout-item">
+            <i class="fas fa-sign-out-alt"></i>
+            Déconnexion
+        </a>
+
+    </div>
+
+</div>
+
+            {% else %}
+
+                <!-- LOGIN -->
+                <a href="{% url 'login' %}" class="nav-item">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Connexion</span>
+                </a>
+
+                <!-- SIGNUP -->
+                <a href="{% url 'signup' %}" class="btn-signup">
+                    Inscription
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+</nav>
+<!-- ================= MESSAGES ================= -->
+<div class="container" style="margin-top: 90px;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- ================= CONTENT ================= -->
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+    <div class="container">
+
+        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:20px;">
+
+            <div>
+                <h4 style="color:#c79a2e;">✦ FlyAura</h4>
+                <p>Luxury travel experiences around the world.</p>
+            </div>
+
+            <div>
+                <h4>Contact</h4>
+                <p>📞 +212 6 50 13 99 16</p>
+                <p>✉️ FlyAura@email.com</p>
+            </div>
+
+            <div>
+                <h4>Réseaux</h4>
+                <p><i class="fab fa-instagram"></i> Instagram</p>
+                <p><i class="fab fa-facebook"></i> Facebook</p>
+            </div>
+
+        </div>
+
+        <div style="margin-top:30px; text-align:center;">
+            <p>© 2026 FlyAura — Luxury Travel</p>
+        </div>
+
+    </div>
+</footer>
+
+</body>
+</html>

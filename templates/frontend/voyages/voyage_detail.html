@@ -1,0 +1,103 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container" style="margin-top: 120px; margin-bottom: 80px;">
+
+    <a href="{% url 'voyages' %}" class="btn-card" style="margin-bottom:20px; display:inline-block;">
+        ← Retour aux voyages
+    </a>
+
+    <div class="detail-grid">
+
+        <!-- IMAGE -->
+        <div class="detail-image">
+            {% if voyage.image %}
+                <img src="{{ voyage.image.url }}">
+            {% else %}
+                <img src="{% static 'images/hero-bg.jpg' %}">
+            {% endif %}
+        </div>
+
+        <!-- INFOS -->
+        <div class="detail-info">
+
+            <h1>{{ voyage.title }}</h1>
+
+            <p class="location">
+                <i class="fas fa-map-marker-alt"></i>
+                {{ voyage.destination }}
+            </p>
+
+            <!-- DATES -->
+            <p style="color:#6b7280;">
+                📅 {{ voyage.start_date|date:"d/m/Y" }} → {{ voyage.end_date|date:"d/m/Y" }}
+            </p>
+
+            <!-- DURÉE -->
+            <p>
+                ⏳ {{ voyage.duree }} jours
+            </p>
+
+            <!-- 🔥 OPTIONS DYNAMIQUES -->
+            {% if voyage.options_list.all %}
+            <div style="margin:20px 0;">
+                <h4>Options disponibles</h4>
+
+                <div style="margin-top:10px;">
+                    {% for opt in voyage.options_list.all %}
+                        <span style="
+                            display:inline-flex;
+                            align-items:center;
+                            gap:6px;
+                            background:#f1f5f9;
+                            padding:6px 12px;
+                            border-radius:20px;
+                            margin:5px;
+                            font-size:14px;
+                        ">
+                            {{ opt.name }}
+                        </span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- PRIX -->
+            <div class="price-box">
+                <strong style="font-size:2rem;">
+                    {{ voyage.price|floatformat:0 }} DH
+                </strong>
+                <div>/personne</div>
+            </div>
+
+            <!-- DESCRIPTION -->
+            <p style="margin:20px 0;">
+                {{ voyage.description }}
+            </p>
+
+            <!-- ITINERAIRE -->
+            {% if voyage.itinerary %}
+                <h3>🗺️ Itinéraire</h3>
+                <p style="white-space: pre-line;">
+                    {{ voyage.itinerary }}
+                </p>
+            {% endif %}
+
+            <!-- ACTION -->
+            {% if user.is_authenticated %}
+                <a href="{% url 'reservation_form' voyage.id %}" class="btn btn-dark btn-full">
+                    Réserver maintenant
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-dark btn-full">
+                    Connectez-vous
+                </a>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

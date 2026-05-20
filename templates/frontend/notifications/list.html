@@ -1,0 +1,117 @@
+{% extends 'frontend/base.html' %}
+
+{% block title %}Notifications{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top:130px; padding-bottom:70px;">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+
+        <div>
+            <h1 class="fw-bold" style="color:#0f172a;">
+                🔔 Mes Notifications
+            </h1>
+
+            <p style="color:#64748b;">
+                Consultez toutes vos activités récentes.
+            </p>
+        </div>
+
+        {% if notifications %}
+        <a href="{% url 'mark_all_read' %}"
+           class="btn btn-warning rounded-pill px-4 fw-semibold">
+
+            ✔ Tout marquer comme lu
+
+        </a>
+        {% endif %}
+
+    </div>
+
+    {% if notifications %}
+
+    <div class="notifications-table">
+
+        <!-- HEAD -->
+        <div class="notif-head">
+
+            <div>Type</div>
+            <div>Message</div>
+            <div>Date</div>
+            <div>Statut</div>
+
+        </div>
+
+        <!-- BODY -->
+        {% for notif in notifications %}
+
+        <div class="notif-row">
+
+            <!-- ICON -->
+            <div class="notif-icon">
+
+                {% if 'annulée' in notif.message %}
+                    <i class="fas fa-times-circle text-danger"></i>
+                {% else %}
+                    <i class="fas fa-check-circle text-success"></i>
+                {% endif %}
+
+            </div>
+
+            <!-- MESSAGE -->
+            <div class="notif-message">
+                {{ notif.message }}
+            </div>
+
+            <!-- DATE -->
+            <div class="notif-date">
+                {{ notif.created_at|date:"d/m/Y H:i" }}
+            </div>
+
+            <!-- STATUS -->
+            <div>
+
+                {% if notif.is_read %}
+
+                    <span class="badge bg-success">
+                        Lu
+                    </span>
+
+                {% else %}
+
+                    <a href="{% url 'mark_as_read' notif.id %}"
+                       class="badge bg-warning text-dark text-decoration-none">
+
+                        Nouveau
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="empty-box">
+
+        <i class="fas fa-bell-slash"></i>
+
+        <h3>Aucune notification</h3>
+
+        <p>Vous n'avez aucune activité récente.</p>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

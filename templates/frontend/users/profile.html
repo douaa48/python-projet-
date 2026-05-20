@@ -1,0 +1,72 @@
+{% extends 'frontend/base.html' %}
+
+{% block content %}
+<div class="container" style="margin-top:120px; max-width:650px;">
+
+    <div class="form-container">
+        <h2 style="text-align:center; margin-bottom:20px;">👤 Mon profil</h2>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- TELEPHONE -->
+            <div class="form-group">
+                <label>📞 Téléphone</label>
+                <input type="text" name="phone" value="{{ profile.phone }}" class="form-control">
+            </div>
+
+            <!-- ADRESSE -->
+            <div class="form-group">
+                <label>🏠 Adresse</label>
+                <textarea name="address" class="form-control">{{ profile.address }}</textarea>
+            </div>
+
+            <!-- DESTINATION -->
+            <div class="form-group">
+                <label>🌍 Destination préférée</label>
+                <select name="preferred_destination" class="form-control">
+                    <option value="">-- Choisir --</option>
+                    <option value="plage" {% if profile.preferred_destination == 'plage' %}selected{% endif %}>Plage</option>
+                    <option value="montagne" {% if profile.preferred_destination == 'montagne' %}selected{% endif %}>Montagne</option>
+                    <option value="ville" {% if profile.preferred_destination == 'ville' %}selected{% endif %}>Ville</option>
+                    <option value="desert" {% if profile.preferred_destination == 'desert' %}selected{% endif %}>Désert</option>
+                </select>
+            </div>
+
+            <!-- STYLE -->
+            <div class="form-group">
+                <label>✈️ Style de voyage</label>
+                <select name="travel_style" class="form-control">
+                    <option value="">-- Choisir --</option>
+                    <option value="luxe" {% if profile.travel_style == 'luxe' %}selected{% endif %}>Luxe</option>
+                    <option value="eco" {% if profile.travel_style == 'eco' %}selected{% endif %}>Économique</option>
+                    <option value="famille" {% if profile.travel_style == 'famille' %}selected{% endif %}>Famille</option>
+                    <option value="aventure" {% if profile.travel_style == 'aventure' %}selected{% endif %}>Aventure</option>
+                </select>
+            </div>
+
+            <!-- PASSEPORT -->
+            <div class="form-group">
+                <label>📄 Passeport</label>
+                <input type="file" name="passport" class="form-control">
+            </div>
+
+            {% if profile.passport %}
+                <div style="margin-top:10px; padding:10px; background:#f3f4f6; border-radius:10px;">
+                    📄 Document actuel :
+                    <a href="{{ profile.passport.url }}" target="_blank" style="color:#c79a2e;">
+                        Voir / Télécharger
+                    </a>
+                </div>
+            {% endif %}
+
+            <!-- BTN -->
+            <button class="btn btn-dark btn-full" style="margin-top:20px;">
+                💾 Enregistrer
+            </button>
+
+        </form>
+    </div>
+
+</div>
+{% endblock %}

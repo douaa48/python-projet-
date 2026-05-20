@@ -1,0 +1,89 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+    <div class="container">
+        <h1>Explore the world with FlyAura</h1>
+        <p>Voyages premium, destinations uniques et expériences inoubliables.</p>
+
+        <a href="{% url 'voyages' %}" 
+   class="btn btn-warning rounded-pill px-5 py-3 fw-bold shadow-lg mt-4">
+    
+    <i class="fas fa-globe-africa me-2"></i>
+    Explore Destinations
+</a>
+    </div>
+</div>
+
+<!-- ================= SECTION ================= -->
+<div class="container">
+
+    <h2 class="section-title">Popular Destinations ✈️</h2>
+
+    <div class="voyages-grid">
+
+        {% for voyage in voyages|slice:":6" %}
+        <div class="voyage-card">
+
+            <!-- IMAGE -->
+            <div class="card-img">
+                {% if voyage.image %}
+                    <img src="{{ voyage.image.url }}">
+                {% else %}
+                    <img src="{% static 'images/hero-bg.jpg' %}">
+                {% endif %}
+
+                <!-- BADGE -->
+                <span class="card-badge">⭐ Populaire</span>
+
+                <!-- DURÉE -->
+                <span class="card-duration">
+                    <i class="fas fa-clock"></i> {{ voyage.duree }} jours
+                </span>
+            </div>
+
+            <!-- BODY -->
+            <div class="card-body">
+
+                <div class="voyage-title">
+                    {{ voyage.title }}
+                </div>
+
+                <div class="voyage-location">
+                    <i class="fas fa-map-marker-alt"></i>
+                    {{ voyage.destination }}
+                </div>
+
+                <!-- DESCRIPTION -->
+                <p style="font-size:0.85rem; color:#666;">
+                    {{ voyage.description|truncatewords:12 }}
+                </p>
+
+                
+
+                <!-- PRIX -->
+                <div class="price-row">
+                    <div class="price">
+                        {{ voyage.price|floatformat:0 }} DH
+                        <small>/personne</small>
+                    </div>
+
+                    <a href="{% url 'voyage_detail' voyage.id %}" class="btn-reserve">
+                        Réserver →
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        {% empty %}
+            <p style="text-align:center;">Aucun voyage disponible</p>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}

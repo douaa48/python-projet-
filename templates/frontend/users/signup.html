@@ -1,0 +1,100 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}Inscription - Évasion{% endblock %}
+
+{% block content %}
+
+<style>
+body {
+    background: #f5f7fa;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* ===== CONTAINER ===== */
+.auth-container {
+    max-width: 420px;
+    margin: 120px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* ===== TITLE ===== */
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+/* ===== INPUT ===== */
+.auth-container input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.auth-container input:focus {
+    border-color: #c79a2e;
+    box-shadow: 0 0 5px rgba(199,154,46,0.3);
+}
+
+/* ===== BUTTON ===== */
+.auth-container button {
+    width: 100%;
+    padding: 14px;
+    background: #c79a2e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-container button:hover {
+    background: #b88c28;
+}
+
+/* ===== LINK ===== */
+.auth-container p {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-container a {
+    color: #c79a2e;
+    text-decoration: none;
+    font-weight: bold;
+}
+</style>
+
+<div class="auth-container">
+
+    <h2>Créer un compte</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="Nom d'utilisateur" required>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <input type="password" name="password1" placeholder="Mot de passe" required>
+        <input type="password" name="password2" placeholder="Confirmer mot de passe" required>
+
+        <button type="submit">S'inscrire</button>
+    </form>
+
+    <p>
+        Déjà inscrit ?
+        <a href="{% url 'login' %}">Connexion</a>
+    </p>
+
+</div>
+
+{% endblock %}

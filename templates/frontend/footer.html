@@ -1,0 +1,45 @@
+
+{% load static %}
+
+{% block title %}Accueil - Royal Voyages{% endblock %}
+
+{% block content %}
+
+<!-- 🔥 HERO SECTION -->
+<div class="text-center mb-5">
+    <h1 class="display-4">🌍 Explorez le monde</h1>
+    <p class="lead">Des voyages inoubliables au meilleur prix</p>
+</div>
+
+<!-- 🔥 LISTE DES VOYAGES -->
+<div class="row">
+    {% for v in voyages %}
+    <div class="col-md-4">
+
+        <div class="card-voyage">
+
+            <!-- IMAGE -->
+            {% if v.image %}
+                <img src="{{ v.image.url }}">
+            {% else %}
+                <img src="{% static 'image/default.jpg' %}">
+            {% endif %}
+
+            <div class="card-body">
+                <h5>{{ v.title }}</h5>
+                <p>{{ v.destination }}</p>
+
+                <p class="prix">{{ v.price }} DH</p>
+
+                <a href="{% url 'voyage_detail' v.id %}" class="btn btn-gold w-100">
+                    Voir détails
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

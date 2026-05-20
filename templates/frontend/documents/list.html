@@ -1,0 +1,84 @@
+{% extends 'frontend/base.html' %}
+
+{% block content %}
+
+<div class="container" style="margin-top:120px; max-width:800px;">
+
+```
+<div class="form-container">
+
+    <h2 style="margin-bottom:20px;">📁 Mes documents</h2>
+
+    <!-- UPLOAD -->
+    <form method="post" enctype="multipart/form-data" style="margin-bottom:30px;">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Nom du document</label>
+            <input type="text" name="title" class="form-control" placeholder="Ex: Passeport, Visa..." required>
+        </div>
+
+        <div class="form-group">
+            <label>Fichier</label>
+            <input type="file" name="file" class="form-control" required>
+        </div>
+
+        <button class="btn btn-dark btn-full">
+            📤 Ajouter document
+        </button>
+    </form>
+
+    <hr>
+
+    <!-- LISTE -->
+    {% if documents %}
+        <div style="display:flex; flex-direction:column; gap:15px; margin-top:20px;">
+
+            {% for doc in documents %}
+                <div style="
+                    padding:15px;
+                    border-radius:10px;
+                    border:1px solid #eee;
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                ">
+
+                    <div>
+                        <strong>📄 {{ doc.title }}</strong><br>
+                        <small style="color:#888;">
+                            Ajouté le {{ doc.uploaded_at|date:"d/m/Y H:i" }}
+                        </small>
+                    </div>
+
+                    <div style="display:flex; gap:10px;">
+
+                        <a href="{{ doc.file.url }}" target="_blank" class="btn btn-dark">
+                            👁 Voir
+                        </a>
+
+                        <a href="{% url 'delete_document' doc.id %}" 
+                           class="btn"
+                           style="background:#ef4444; color:white;"
+                           onclick="return confirm('Supprimer ce document ?')">
+                            🗑 Supprimer
+                        </a>
+
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+        <div style="text-align:center; margin-top:30px; color:#888;">
+            <p>Aucun document ajouté</p>
+        </div>
+    {% endif %}
+
+</div>
+```
+
+</div>
+{% endblock %}

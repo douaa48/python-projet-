@@ -1,0 +1,150 @@
+{% extends 'frontend/base.html' %}
+{% load static %}
+
+{% block title %}Mes réservations - Évasion{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="section-title">Mes réservations</h2>
+
+    {% if reservations %}
+        <div class="voyages-grid">
+
+            {% for reservation in reservations %}
+            <div class="voyage-card">
+
+                <!-- IMAGE -->
+                <div class="card-img">
+                    {% if reservation.voyage.image %}
+                        <img src="{{ reservation.voyage.image.url }}">
+                    {% else %}
+                        <img src="{% static 'images/hero-bg.jpg' %}">
+                    {% endif %}
+
+                    <!-- 🎯 STATUT -->
+                    {% if reservation.status == 'confirmed' %} 
+                    <span class="card-badge badge-success">
+               {% elif reservation.status == 'pending' %} 
+                   <span class="card-badge badge-warning">
+                       {% else %} 
+                  <span class="card-badge badge-danger">
+                          {% endif %}
+                   {{ reservation.get_status_display }} </span>
+
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body">
+
+                    <!-- TITRE -->
+                    <div class="voyage-title">
+                        {{ reservation.voyage.title }}
+                    </div>
+
+                    <!-- DESTINATION -->
+                    <div class="voyage-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ reservation.voyage.destination }}
+                    </div>
+
+                    <!-- DATES -->
+                    <p>
+                        📅 
+                        {% if reservation.date_arrivee and reservation.date_retour %}
+                            {{ reservation.date_arrivee|date:"d/m/Y" }} → 
+                            {{ reservation.date_retour|date:"d/m/Y" }}
+                        {% else %}
+                            Non définies
+                        {% endif %}
+                    </p>
+
+                    <!-- PERSONNES -->
+                    <p>
+                        👥 {{ reservation.personnes }} personne(s)
+                    </p>
+
+                    <!-- PRIX -->
+                    <div class="price">
+                        {{ reservation.total|floatformat:0 }} DH
+                    </div>
+
+                    <!-- 💰 RESTE -->
+                    <p style="font-size:0.9rem; color:#6b7280;">
+                        Reste : {{ reservation.reste_a_payer|floatformat:0 }} DH
+                    </p>
+
+                    <!-- 💸 REMBOURSEMENT -->
+                    {% if reservation.peut_annuler %}
+                    <p style="font-size:0.85rem; color:#10b981;">
+                        Remboursement possible :
+                        {{ reservation.montant_remboursement|floatformat:0 }} DH
+                    </p>
+                    {% endif %}
+
+                    <!-- ACTIONS -->
+<div class="d-flex flex-wrap gap-2 mt-4">
+
+    <!-- VOIR -->
+    <a href="{% url 'voyage_detail' reservation.voyage.id %}"
+       class="btn btn-outline-dark rounded-pill px-4">
+
+        <i class="fas fa-eye me-1"></i>
+        Voir
+
+    </a>
+
+    <!-- PAYER -->
+    {% if reservation.status != 'cancelled' %}
+    <a href="{% url 'payment_page' reservation.id %}"
+       class="btn btn-warning rounded-pill px-4 text-white">
+
+        <i class="fas fa-credit-card me-1"></i>
+        Payer
+
+    </a>
+    {% endif %}
+
+    <!-- ANNULER -->
+    {% if reservation.status != 'cancelled' %}
+    <a href="{% url 'cancel_reservation' reservation.id %}"
+       class="btn btn-outline-danger rounded-pill px-4">
+
+        <i class="fas fa-times me-1"></i>
+        Annuler
+
+    </a>
+    {% endif %}
+
+    <!-- FACTURE -->
+    <a href="{% url 'invoice' reservation.id %}"
+       class="btn btn-outline-secondary rounded-pill px-4">
+
+        <i class="fas fa-file-invoice me-1"></i>
+        Facture
+
+    </a>
+
+</div>
+
+                </div>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+        <div class="empty-state">
+            <p>Vous n'avez pas encore de réservation.</p>
+
+            <a href="{% url 'voyages' %}" class="btn btn-gold">
+                ✈️ Découvrir nos voyages
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

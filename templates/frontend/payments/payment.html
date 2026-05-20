@@ -1,0 +1,91 @@
+{% extends 'frontend/base.html' %}
+
+{% block content %}
+<div class="container" style="margin-top:120px;">
+
+    <div class="form-container">
+        <h2>Paiement</h2>
+
+        <!-- 📋 INFOS VOYAGE -->
+        <div class="price-box">
+            <strong>{{ reservation.voyage.title }}</strong><br>
+            Total : {{ reservation.total|floatformat:0 }} DH
+        </div>
+
+        <!-- 💳 SITUATION PAIEMENT -->
+        <div class="price-box">
+            💳 Déjà payé : {{ reservation.total_paye|floatformat:0 }} DH
+        </div>
+
+        <div class="price-box">
+            📌 Reste à payer : {{ reservation.reste_a_payer|floatformat:0 }} DH
+        </div>
+
+        <!-- ❌ MESSAGE ERREUR -->
+        {% if error %}
+        <div style="background:#fee2e2; color:#991b1b; padding:10px; border-radius:8px; margin-bottom:15px;">
+            ❌ {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- TYPE -->
+            <div class="form-group">
+                <label>Type de paiement</label>
+                <select name="payment_type" id="paymentType" class="form-control">
+                    <option value="full">Paiement total</option>
+                    <option value="deposit">Acompte (30%)</option>
+                </select>
+            </div>
+
+            <!-- METHOD -->
+            <div class="form-group">
+                <label>Méthode</label>
+                <select name="method" class="form-control">
+                    <option value="card">Carte bancaire</option>
+                    <option value="paypal">PayPal</option>
+                </select>
+            </div>
+
+            <!-- 💰 MONTANT DYNAMIQUE -->
+            <div id="montantBox" class="price-box">
+                💰 Montant à payer : {{ reservation.reste_a_payer|floatformat:0 }} DH
+            </div>
+
+            <button class="btn btn-dark btn-full">
+                💳 Payer maintenant
+            </button>
+
+        </form>
+    </div>
+
+</div>
+
+<script>
+const total = parseFloat("{{ reservation.total }}");
+const reste = parseFloat("{{ reservation.reste_a_payer }}");
+
+const typeSelect = document.getElementById("paymentType");
+const box = document.getElementById("montantBox");
+
+function updateMontant() {
+    let montant = reste;
+
+    if (typeSelect.value === "deposit") {
+        montant = total * 0.3;
+
+        // 🔒 ne pas dépasser le reste
+        if (montant > reste) {
+            montant = reste;
+        }
+    }
+
+    box.innerHTML = `<strong>💰 Montant à payer : ${Math.round(montant)} DH</strong>`;
+}
+
+typeSelect.addEventListener("change", updateMontant);
+</script>
+
+{% endblock %}
