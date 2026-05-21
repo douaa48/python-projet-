@@ -1,10 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
-
-# =========================
-# VOYAGE
-# =========================
 class Voyage(models.Model):
 
     CATEGORY_CHOICES = [
@@ -14,9 +10,6 @@ class Voyage(models.Model):
         ('desert', 'Désert'),
     ]
 
-    # =========================
-    # INFOS PRINCIPALES
-    # =========================
     title = models.CharField(
         max_length=200
     )
@@ -48,32 +41,24 @@ class Voyage(models.Model):
         blank=True
     )
 
-    # =========================
-    # PROGRAMME
-    # =========================
+    
     itinerary = models.TextField(
         blank=True,
         null=True
     )
 
-    # =========================
-    # POINTS D'INTERET
-    # =========================
+   
     points_interet = models.TextField(
         blank=True,
         null=True
     )
 
-    # =========================
-    # DISPONIBILITE
-    # =========================
+   
     places = models.PositiveIntegerField(
         default=20
     )
 
-    # =========================
-    # STATUT
-    # =========================
+    
     is_active = models.BooleanField(
         default=True
     )
@@ -82,9 +67,7 @@ class Voyage(models.Model):
         auto_now_add=True
     )
 
-    # =========================
-    # META
-    # =========================
+    
     class Meta:
 
         ordering = ['start_date']
@@ -93,9 +76,7 @@ class Voyage(models.Model):
 
         verbose_name_plural = "Voyages"
 
-    # =========================
-    # STRING
-    # =========================
+   
     def __str__(self):
 
         return (
@@ -103,9 +84,7 @@ class Voyage(models.Model):
             f"({self.start_date} → {self.end_date})"
         )
 
-    # =========================
-    # VALIDATION
-    # =========================
+    
     def clean(self):
 
         if self.end_date <= self.start_date:
@@ -114,18 +93,14 @@ class Voyage(models.Model):
                 "La date de fin doit être après la date de début"
             )
 
-    # =========================
-    # DUREE
-    # =========================
+   
     def duree(self):
 
         return (
             self.end_date - self.start_date
         ).days
 
-    # =========================
-    # PLACES RESTANTES
-    # =========================
+   
     def places_restantes(self):
 
         reserved = sum(
@@ -140,9 +115,7 @@ class Voyage(models.Model):
 
         return self.places - reserved
 
-    # =========================
-    # DISPONIBILITE
-    # =========================
+   
     def est_disponible(self):
 
         return (
@@ -153,11 +126,7 @@ class Voyage(models.Model):
 
         )
     
-    
 
-    # =========================
-    # STATISTIQUES ADMIN
-    # =========================
     def total_reservations(self):
 
         return self.reservations.count()
@@ -173,17 +142,13 @@ class Voyage(models.Model):
             for r in confirmed
         )
 
-    # =========================
-    # VOYAGE POPULAIRE
-    # =========================
+    
     def est_populaire(self):
 
         return self.total_reservations() >= 5
 
 
-# =========================
-# OPTIONS VOYAGE
-# =========================
+
 class Option(models.Model):
 
     voyage = models.ForeignKey(
@@ -214,18 +179,13 @@ class Option(models.Model):
         auto_now_add=True
     )
 
-    # =========================
-    # META
-    # =========================
+   
     class Meta:
 
         verbose_name = "Option"
 
         verbose_name_plural = "Options"
 
-    # =========================
-    # STRING
-    # =========================
     def __str__(self):
 
         return (

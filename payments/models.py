@@ -6,10 +6,6 @@ from reservations.models import Reservation
 
 
 class Payment(models.Model):
-
-    # =========================
-    # METHODES
-    # =========================
     METHOD_CHOICES = [
 
         ('card', 'Carte bancaire'),
@@ -20,9 +16,6 @@ class Payment(models.Model):
 
     ]
 
-    # =========================
-    # TYPES
-    # =========================
     TYPE_CHOICES = [
 
         ('full', 'Paiement total'),
@@ -33,9 +26,6 @@ class Payment(models.Model):
 
     ]
 
-    # =========================
-    # STATUTS
-    # =========================
     STATUS_CHOICES = [
 
         ('pending', 'En attente'),
@@ -47,10 +37,6 @@ class Payment(models.Model):
         ('failed', 'Refusé'),
 
     ]
-
-    # =========================
-    # RELATION
-    # =========================
     reservation = models.ForeignKey(
 
         Reservation,
@@ -60,9 +46,7 @@ class Payment(models.Model):
         related_name="payments"
     )
 
-    # =========================
-    # MONTANT
-    # =========================
+    
     amount = models.DecimalField(
 
         max_digits=10,
@@ -72,9 +56,6 @@ class Payment(models.Model):
         default=Decimal('0.00')
     )
 
-    # =========================
-    # TYPE PAIEMENT
-    # =========================
     payment_type = models.CharField(
 
         max_length=20,
@@ -84,9 +65,7 @@ class Payment(models.Model):
         default='full'
     )
 
-    # =========================
-    # METHODE
-    # =========================
+    
     method = models.CharField(
 
         max_length=20,
@@ -96,9 +75,7 @@ class Payment(models.Model):
         default='card'
     )
 
-    # =========================
-    # STATUT
-    # =========================
+
     status = models.CharField(
 
         max_length=20,
@@ -112,9 +89,7 @@ class Payment(models.Model):
         auto_now_add=True
     )
 
-    # =========================
-    # META
-    # =========================
+   
     class Meta:
 
         ordering = ['-created_at']
@@ -123,9 +98,7 @@ class Payment(models.Model):
 
         verbose_name_plural = "Paiements"
 
-    # =========================
-    # VALIDATION
-    # =========================
+    
     def clean(self):
 
         if self.amount <= 0:
@@ -134,25 +107,19 @@ class Payment(models.Model):
                 "Montant invalide"
             )
 
-    # =========================
-    # SAVE
-    # =========================
+    
     def save(self, *args, **kwargs):
 
         self.full_clean()
 
         super().save(*args, **kwargs)
 
-    # =========================
-    # PAIEMENT REUSSI
-    # =========================
+   
     def is_success(self):
 
         return self.status == 'paid'
 
-    # =========================
-    # REMBOURSEMENT
-    # =========================
+   
     def is_refunded(self):
 
         return self.status == 'refunded'
@@ -169,9 +136,7 @@ class Payment(models.Model):
 
             self.save()
 
-    # =========================
-    # RESTE A PAYER
-    # =========================
+    
     def reste_reservation(self):
 
         total_paid = sum(
@@ -191,16 +156,12 @@ class Payment(models.Model):
 
         )
 
-    # =========================
-    # PAIEMENT COMPLET
-    # =========================
+    
     def reservation_paid(self):
 
         return self.reste_reservation() <= 0
 
-    # =========================
-    # STRING
-    # =========================
+   
     def __str__(self):
 
         return (

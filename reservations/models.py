@@ -210,7 +210,7 @@ class Reservation(models.Model):
 
         status_changed = previous_status != self.status
 
-        # Notification confirmation
+        
         if (
             not is_new
             and status_changed
@@ -225,7 +225,7 @@ class Reservation(models.Model):
                 type='reservation'
             )
 
-        # Notification annulation
+        
         elif (
             not is_new
             and status_changed
@@ -240,9 +240,6 @@ class Reservation(models.Model):
                 type='reservation'
             )
 
-    # =========================
-    # DUREE
-    # =========================
     def duree(self):
 
         if self.date_arrivee and self.date_retour:
@@ -250,9 +247,6 @@ class Reservation(models.Model):
 
         return 0
 
-    # =========================
-    # ANNULATION
-    # =========================
     def jours_avant_depart(self):
 
         if self.date_arrivee:
@@ -267,9 +261,7 @@ class Reservation(models.Model):
 
         return self.jours_avant_depart() >= 3
 
-    # =========================
-    # REMBOURSEMENT
-    # =========================
+    
     def taux_remboursement(self):
 
         jours = self.jours_avant_depart()
@@ -286,9 +278,6 @@ class Reservation(models.Model):
 
         return self.total_paye() * self.taux_remboursement()
 
-    # =========================
-    # PAIEMENT
-    # =========================
     def total_paye(self):
 
         if hasattr(self, 'payments'):
@@ -318,9 +307,6 @@ class Reservation(models.Model):
 
         return total * Decimal('0.3')
 
-    # =========================
-    # STATISTIQUES ADMIN
-    # =========================
     @classmethod
     def total_revenus(cls):
 

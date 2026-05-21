@@ -12,17 +12,8 @@ import json
 
 @staff_member_required
 def admin_dashboard(request):
-
-    # =========================
-    # RECHERCHE
-    # =========================
-
     query = request.GET.get('q')
-
-    # =========================
-    # STATISTIQUES
-    # =========================
-
+    
     total_voyages = Voyage.objects.count()
 
     total_reservations = Reservation.objects.count()
@@ -36,9 +27,6 @@ def admin_dashboard(request):
         )
     )
 
-    # =========================
-    # RÉSERVATIONS RÉCENTES
-    # =========================
 
     if query:
 
@@ -66,16 +54,9 @@ def admin_dashboard(request):
             )[:5]
         )
 
-    # =========================
-    # VOYAGES POPULAIRES
-    # =========================
+    
 
     voyages_populaires = Voyage.objects.all()[:5]
-
-    # =========================
-    # GRAPHIQUE MENSUEL
-    # =========================
-
     reservations_par_mois = (
 
         Reservation.objects
@@ -109,9 +90,6 @@ def admin_dashboard(request):
                 item['total']
             )
 
-    # =========================
-    # TOP DESTINATIONS
-    # =========================
 
     destinations_labels = []
 
@@ -130,9 +108,7 @@ def admin_dashboard(request):
             ).count()
         )
 
-    # =========================
-    # CONTEXT
-    # =========================
+
 
     context = {
 

@@ -6,10 +6,6 @@ from .models import Payment
 
 @admin.register(Payment)
 class PaymentAdmin(admin.ModelAdmin):
-
-    # =========================
-    # DISPLAY
-    # =========================
     list_display = (
 
         'reservation',
@@ -27,9 +23,6 @@ class PaymentAdmin(admin.ModelAdmin):
         'created_at',
     )
 
-    # =========================
-    # FILTERS
-    # =========================
     list_filter = (
 
         'status',
@@ -41,9 +34,6 @@ class PaymentAdmin(admin.ModelAdmin):
         'created_at',
     )
 
-    # =========================
-    # SEARCH
-    # =========================
     search_fields = (
 
         'reservation__id',
@@ -51,37 +41,26 @@ class PaymentAdmin(admin.ModelAdmin):
         'reservation__user__username',
     )
 
-    # =========================
-    # ORDER
-    # =========================
     ordering = (
         '-created_at',
     )
 
-    # =========================
-    # READONLY
-    # =========================
+
     readonly_fields = (
         'created_at',
     )
 
-    # =========================
-    # PAGINATION
-    # =========================
+    
     list_per_page = 10
 
-    # =========================
-    # USER
-    # =========================
+    
     def user(self, obj):
 
         return obj.reservation.user
 
     user.short_description = "Utilisateur"
 
-    # =========================
-    # STATUS COLOR
-    # =========================
+   
     def status_colored(self, obj):
 
         colors = {
@@ -107,10 +86,6 @@ class PaymentAdmin(admin.ModelAdmin):
         )
 
     status_colored.short_description = "Statut"
-
-    # =========================
-    # ACTIONS ADMIN
-    # =========================
     actions = [
 
         'mark_as_paid',
@@ -119,10 +94,6 @@ class PaymentAdmin(admin.ModelAdmin):
 
         'mark_as_failed',
     ]
-
-    # =========================
-    # PAIEMENT
-    # =========================
     def mark_as_paid(self, request, queryset):
 
         updated = queryset.update(
@@ -140,10 +111,6 @@ class PaymentAdmin(admin.ModelAdmin):
     mark_as_paid.short_description = (
         "💳 Marquer comme payé"
     )
-
-    # =========================
-    # REMBOURSEMENT
-    # =========================
     def mark_as_refunded(self, request, queryset):
 
         updated = queryset.update(
@@ -162,9 +129,7 @@ class PaymentAdmin(admin.ModelAdmin):
         "💸 Marquer comme remboursé"
     )
 
-    # =========================
-    # ECHEC
-    # =========================
+
     def mark_as_failed(self, request, queryset):
 
         updated = queryset.update(

@@ -11,19 +11,11 @@ class Notification(models.Model):
         ('payment', 'Paiement'),
         ('system', 'Système'),
     ]
-
-    # =========================
-    # USER
-    # =========================
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="notifications"
     )
-
-    # =========================
-    # CONTENU
-    # =========================
     title = models.CharField(
         max_length=255
     )
@@ -36,9 +28,6 @@ class Notification(models.Model):
         default='system'
     )
 
-    # =========================
-    # ETAT
-    # =========================
     is_read = models.BooleanField(
         default=False
     )
@@ -46,10 +35,6 @@ class Notification(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True
     )
-
-    # =========================
-    # META
-    # =========================
     class Meta:
 
         ordering = ['-created_at']
@@ -58,9 +43,7 @@ class Notification(models.Model):
 
         verbose_name_plural = "Notifications"
 
-    # =========================
-    # STRING
-    # =========================
+    
     def __str__(self):
 
         return (

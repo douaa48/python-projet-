@@ -5,10 +5,6 @@ from .models import Notification
 
 @admin.register(Notification)
 class NotificationAdmin(admin.ModelAdmin):
-
-    # =========================
-    # DISPLAY
-    # =========================
     list_display = (
         'user',
         'title',
@@ -17,46 +13,32 @@ class NotificationAdmin(admin.ModelAdmin):
         'created_at',
     )
 
-    # =========================
-    # FILTERS
-    # =========================
+    
     list_filter = (
         'type',
         'is_read',
         'created_at',
     )
 
-    # =========================
-    # SEARCH
-    # =========================
     search_fields = (
         'user__username',
         'title',
         'message',
     )
 
-    # =========================
-    # ORDERING
-    # =========================
     ordering = (
         '-created_at',
     )
 
-    # =========================
-    # READONLY
-    # =========================
+    
     readonly_fields = (
         'created_at',
     )
 
-    # =========================
-    # PAGINATION
-    # =========================
+    
     list_per_page = 10
 
-    # =========================
-    # STATUS COLOR
-    # =========================
+    
     def status_colored(self, obj):
 
         if obj.is_read:
@@ -71,9 +53,7 @@ class NotificationAdmin(admin.ModelAdmin):
 
     status_colored.short_description = "État"
 
-    # =========================
-    # ACTIONS
-    # =========================
+    
     actions = [
         'mark_as_read',
     ]

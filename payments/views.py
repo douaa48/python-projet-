@@ -10,10 +10,6 @@ from reportlab.pdfgen import canvas
 from decimal import Decimal
 import random
 
-
-# =========================
-# PAGE PAIEMENT
-# =========================
 @login_required
 def payment_page(request, reservation_id):
 
@@ -27,15 +23,8 @@ def payment_page(request, reservation_id):
 
         payment_type = request.POST.get("payment_type")
         method = request.POST.get("method")
-
-        # =========================
-        # SIMULATION PAIEMENT
-        # =========================
         success = random.choice([True, True, True, True, False])
 
-        # =========================
-        # RESTE À PAYER
-        # =========================
         try:
             reste = reservation.reste_a_payer()
 
@@ -47,10 +36,6 @@ def payment_page(request, reservation_id):
             )
 
             reste = (reservation.total or 0) - total_paye
-
-        # =========================
-        # DÉJÀ PAYÉ
-        # =========================
         if reste <= 0:
 
             return render(
@@ -61,10 +46,6 @@ def payment_page(request, reservation_id):
                     "error": "Ce voyage est déjà entièrement payé ❌"
                 }
             )
-
-        # =========================
-        # CALCUL MONTANT
-        # =========================
         if payment_type == "deposit":
 
             amount = reservation.total * Decimal('0.30')
@@ -73,7 +54,6 @@ def payment_page(request, reservation_id):
 
             amount = reste
 
-        # Éviter dépassement
         if amount > reste:
             amount = reste
 
@@ -81,9 +61,7 @@ def payment_page(request, reservation_id):
             Decimal("0.01")
         )
 
-        # =========================
-        # PAIEMENT ÉCHOUÉ
-        # =========================
+        
         if not success:
 
             Payment.objects.create(
@@ -103,9 +81,6 @@ def payment_page(request, reservation_id):
                 }
             )
 
-        # =========================
-        # PAIEMENT RÉUSSI
-        # =========================
         Payment.objects.create(
             reservation=reservation,
             amount=amount,
@@ -114,9 +89,7 @@ def payment_page(request, reservation_id):
             status='paid'
         )
 
-        # =========================
-        # UPDATE STATUT
-        # =========================
+        
         try:
 
             reservation.refresh_from_db()
@@ -150,9 +123,6 @@ def payment_page(request, reservation_id):
     )
 
 
-# =========================
-# SUCCESS
-# =========================
 def payment_success(request):
 
     return render(
@@ -160,10 +130,6 @@ def payment_success(request):
         "frontend/payments/payment_success.html"
     )
 
-
-# =========================
-# FAILED
-# =========================
 def payment_failed(request):
 
     return render(
@@ -171,10 +137,6 @@ def payment_failed(request):
         "frontend/payments/payment_failed.html"
     )
 
-
-# =========================
-# FACTURE HTML
-# =========================
 @login_required
 def invoice(request, reservation_id):
 
@@ -209,10 +171,6 @@ def invoice(request, reservation_id):
         }
     )
 
-
-# =========================
-# FACTURE PDF
-# =========================
 @login_required
 def invoice_pdf(request, reservation_id):
 
@@ -237,9 +195,6 @@ def invoice_pdf(request, reservation_id):
 
     y = 800
 
-    # =========================
-    # TITRE
-    # =========================
     p.setFont(
         "Helvetica-Bold",
         18
@@ -258,9 +213,6 @@ def invoice_pdf(request, reservation_id):
         12
     )
 
-    # =========================
-    # MONTANTS
-    # =========================
     total_paye = (
         reservation.total_paye()
         if hasattr(reservation, 'total_paye')
@@ -273,9 +225,6 @@ def invoice_pdf(request, reservation_id):
         else 0
     )
 
-    # =========================
-    # INFOS
-    # =========================
     infos = [
 
         f"Reservation ID : {reservation.id}",
@@ -309,9 +258,7 @@ def invoice_pdf(request, reservation_id):
 
         y -= 30
 
-    # =========================
-    # MESSAGE
-    # =========================
+    
     y -= 20
 
     p.drawString(

@@ -63,23 +63,17 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
-# DATABASE
-# MySQL uniquement.
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DJANGO_DB_NAME', 'gestion_voyage'),
-        'USER': os.environ.get('DJANGO_DB_USER', 'root'),
-        'PASSWORD': os.environ.get('DJANGO_DB_PASSWORD', ''),
-        'HOST': os.environ.get('DJANGO_DB_HOST', '127.0.0.1'),
-        'PORT': os.environ.get('DJANGO_DB_PORT', '3306'),
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+        'NAME': 'gestion_voyage',
+        'USER': 'root',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
-
 # AUTH
 AUTH_USER_MODEL = 'users.User'
 

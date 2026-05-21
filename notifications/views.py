@@ -3,10 +3,6 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Notification
 
-
-# =========================
-# LISTE NOTIFICATIONS
-# =========================
 @login_required
 def notifications_list(request):
 
@@ -35,11 +31,6 @@ def notifications_list(request):
         "frontend/notifications/list.html",
         context
     )
-
-
-# =========================
-# MARQUER COMME LUE
-# =========================
 @login_required
 def mark_as_read(request, id):
 
@@ -56,10 +47,6 @@ def mark_as_read(request, id):
 
     return redirect("notifications")
 
-
-# =========================
-# TOUT MARQUER LU
-# =========================
 @login_required
 def mark_all_read(request):
 
